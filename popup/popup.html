@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    body { width: 350px; font-family: sans-serif; margin: 0; padding: 0; }
-    .tab-container { display: flex; width: 100%; border-bottom: 1px solid #ddd; }
-    .tab-btn { flex: 1; padding: 12px; border: none; background: none; cursor: pointer; }
-    .tab-btn.active { color: #2196F3; border-bottom: 3px solid #2196F3; font-weight: bold; }
-    .tab-content { display: none; padding: 20px; text-align: center; }
-    .tab-content.active { display: block; }
-  </style>
+  <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
 
@@ -20,7 +13,15 @@
 
   <div id="pomodoro" class="tab-content active"><h1>Pomodoro Time</h1></div>
   <div id="timer" class="tab-content"><h1>Timer</h1></div>
-  <div id="settings" class="tab-content"><h1>Settings</h1></div>
+  <div id="settings" class="tab-content">
+    <select id="listType" name="listType">
+      <option value="blacklist">Blacklist</option>
+      <option value="whitelist">Whitelist</option>
+    </select>
+    <button type="submit">Add</button>
+    <ul class="list-content"></ul>
+
+  </div>
 
   <script src="popup.js"></script>
 </body>
