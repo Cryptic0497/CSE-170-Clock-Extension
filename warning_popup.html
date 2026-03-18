@@ -6,19 +6,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Warning Popup</title>
-    <styles>
-        
-    </styles>
+    <style>
+        .backdrop {
+            font-family: 'Montserrat', sans-serif;
+            background-color: rgba(26, 27, 29, 0.3);
+            color: #A39BFF;
+
+            position:fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            
+        }
+
+        .warning-text{
+            text-shadow:
+                0.5em 0.5em 0.5em #A39BFF,
+                1em 1em 1em #A39BFF,
+                1.5em 1.5em 1.5em #8075FF;
+            text-align: center;             
+        }
+
+        #big {
+            font-size: 3.5em;
+            margin-bottom: 0px;
+            text-align: center;
+        }
+
+        #medium {
+            font-size: 1.5em;
+            margin-top: 0.1em;
+            text-align: center;
+        }
+    </style>
 
 </head>
 <body>
-    <header class = "Warning">
-        <h1>Warning </h1>
-        <h3>You have attempted to access a site you have restricted for the duration of your study</h3>
+<div class = "backdrop">
+    <header class = "warning">
+        <h1 id="big">Warning </h1>
+        <h3 id="medium">You have attempted to access a site you have restricted for the duration of your study</h3>
     </header>
-    <content class = "content">
 
 
-    </content>
+
+</div>
 </body>
 </html>
