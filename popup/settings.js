@@ -1,7 +1,10 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function () {
   const tabs = document.querySelectorAll('.tab-btn');
   const contents = document.querySelectorAll('.tab-content');
   const themeButtons = document.querySelectorAll('.theme-toggle button');
+  const addButton = document.querySelector('.add-btn');
+  const urlInput = document.getElementById('urlInput');
+  const listContent = document.querySelector('.list-content');
   const body = document.body;
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
   let autoMode = true;
@@ -30,11 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   tabs.forEach(button => {
     button.addEventListener('click', () => {
-      const targetId = button.dataset.target;
+      const targetId = button.getAttribute('data-target');
 
+      // 1. Remove active class from all buttons and contents
       tabs.forEach(btn => btn.classList.remove('active'));
-      contents.forEach(c => c.classList.remove('active'));
+      contents.forEach(content => content.classList.remove('active'));
 
+      // 2. Add active class to the clicked button and its target div
       button.classList.add('active');
       document.getElementById(targetId).classList.add('active');
     });
@@ -66,4 +71,36 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial theme: auto (system default)
   setSelectedTheme('auto');
   applySystemTheme();
+
+  function addUrlToList() {
+    const urlValue = urlInput.value.trim();
+
+    if (!urlValue) return;
+
+    const listItem = document.createElement('li');
+    const urlText = document.createElement('span');
+    urlText.textContent = urlValue;
+
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.textContent = 'x';
+    deleteButton.setAttribute('aria-label', `Delete ${urlValue}`);
+    deleteButton.addEventListener('click', () => {
+      listItem.remove();
+    });
+
+    listItem.appendChild(urlText);
+    listItem.appendChild(deleteButton);
+    listContent.appendChild(listItem);
+    urlInput.value = '';
+  }
+
+  addButton.addEventListener('click', addUrlToList);
+
+  urlInput.addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      addUrlToList();
+    }
+  });
 });
