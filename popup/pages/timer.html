@@ -1,9 +1,125 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <style>
+      :root {
+        --text: #1b1b32;
+        --muted: #5f5f77;
+        --panel: #ffffff;
+        --accent: #d94f2a;
+        --accent-strong: #b93a17;
+      }
+
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+        background: var(--panel);
+        color: var(--text);
+        width: 260px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 20px;
+        margin-bottom: 15px;
+        color: var(--text);
+      }
+
+      #timer-display {
+        font-size: 48px;
+        font-weight: bold;
+        margin: 20px 0;
+        color: var(--text);
+        display: grid;
+        grid-template-rows: 1; 
+        grid-template-columns: 2fr 1fr 2fr;
+        align-items: center;
+        justify-items: center;
+      }
+
+      #minute {
+        width: 22vw;
+        height: 12vw;
+        font-size: 100%;
+        text-align: center;
+        border-radius: 40%;
+        
+      }
+
+      #second{
+        width: 22vw;
+        height: 12vw; 
+        font-size: 100%;
+        text-align: center;
+        border-radius: 40%;
+      }
+
+      .controls {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+      }
+
+      button {
+        flex: 1;
+        margin: 0 5px;
+        padding: 10px;
+        border: none;
+        border-radius: 6px;
+        background: var(--accent);
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      button:hover {
+        background: var(--accent-strong);
+      }
+
+      button.reset {
+        background: #5f5f77;
+      }
+
+      button.reset:hover {
+        background: #4a4a5f;
+      }
+    </style>
+  </head>
+    
+  <body>
+    <h1>Timer</h1>
+
+    <div id="timer-display">
+        <input 
+          id="minute"   
+          type="number" 
+          min="0" 
+          step="1" 
+          pattern="\d+" />
+
+        <p id="colon">:</p>
+
+        <input 
+          id="second"
+          type="number" 
+          min="0" 
+          step="1" 
+          pattern="\d+" 
+          />
+    </div>
+
+    <div class="controls">
+      <button id="start">Start</button>
+      <button id="pause">Pause</button>
+      <button id="reset" class="reset">Reset</button>
+    </div>
+  <script>
 <body>
   <h1>Timer</h1>
-  <script>
+  <!-- <script>
     console.log("Timer logic here");
-  </script>
+  </script> -->
 </body>
 </html>
