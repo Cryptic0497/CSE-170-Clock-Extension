@@ -15,13 +15,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": [
-        "content/activity-tracker.js",
-        "content/inactivity-monitor.js",
-        "content/website-monitor.js",
-        "content/ui-manager.js",
-        "content/content.js"
-      ],
+      "js": ["content/content.js"],
       "run_at": "document_idle"
     }
   ],

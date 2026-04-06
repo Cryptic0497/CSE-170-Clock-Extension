@@ -1,16 +1,14 @@
-// popup/pages/pomodoro.js
-// Pomodoro timer UI — communicates with background.js via POMODORO_* messages.
-
+// --- UI Logic ---
 const timeDisplay = document.getElementById('timeDisplay');
 const phaseDisplay = document.getElementById('phaseDisplay');
 const workHours = document.getElementById('workHours');
 const workMins = document.getElementById('workMins');
 const breakHours = document.getElementById('breakHours');
 const breakMins = document.getElementById('breakMins');
-const startBtn = document.getElementById('startBtn');
 
-let localDisplayInterval = null;
+let localDisplayInterval;
 
+// Helper to format seconds into HH:MM:SS
 function formatTime(totalSeconds) {
   const h = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
   const m = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
@@ -18,51 +16,51 @@ function formatTime(totalSeconds) {
   return `${h}:${m}:${s}`;
 }
 
+// Fetches the real time from the background worker and updates the HTML
 function syncDisplay() {
-  chrome.runtime.sendMessage({ action: 'POMODORO_GET_STATE' }, (state) => {
-    if (!state) return;
-    timeDisplay.innerText = formatTime(state.remainingSeconds);
-    phaseDisplay.innerText = state.phase + ' PHASE';
-
-    if (state.isRunning) {
-      startBtn.textContent = 'Running...';
-      startBtn.disabled = true;
-      if (!localDisplayInterval) {
+  chrome.runtime.sendMessage({ action: 'GET_STATE' }, (state) => {
+    if (state) {
+      timeDisplay.innerText = formatTime(state.timeRemaining);
+      phaseDisplay.innerText = state.phase + " PHASE";
+      
+      if (state.isRunning && !localDisplayInterval) {
+        // Keep the UI ticking locally every second while the popup is open
         localDisplayInterval = setInterval(syncDisplay, 1000);
+      } else if (!state.isRunning) {
+        clearInterval(localDisplayInterval);
+        localDisplayInterval = null;
       }
-    } else {
-      startBtn.textContent = state.remainingSeconds > 0 ? 'Resume' : 'Start';
-      startBtn.disabled = false;
-      clearInterval(localDisplayInterval);
-      localDisplayInterval = null;
     }
   });
 }
 
-startBtn.addEventListener('click', () => {
+// --- Button Listeners ---
+document.getElementById('startBtn').addEventListener('click', () => {
   const wTime = (parseInt(workHours.value) || 0) * 3600 + (parseInt(workMins.value) || 0) * 60;
   const bTime = (parseInt(breakHours.value) || 0) * 3600 + (parseInt(breakMins.value) || 0) * 60;
-  if (wTime <= 0) return;
-  chrome.runtime.sendMessage({ action: 'POMODORO_START', workTime: wTime, breakTime: bTime }, () => {
+
+  chrome.runtime.sendMessage({ 
+    action: 'START', 
+    workTime: wTime, 
+    breakTime: bTime 
+  }, () => {
     syncDisplay();
   });
 });
 
-document.getElementById('pauseBtn').addEventListener('click', () => {
-  chrome.runtime.sendMessage({ action: 'POMODORO_PAUSE' }, () => {
+document.getElementById('stopBtn').addEventListener('click', () => {
+  chrome.runtime.sendMessage({ action: 'STOP' }, () => {
     syncDisplay();
   });
 });
 
 document.getElementById('resetBtn').addEventListener('click', () => {
-  chrome.runtime.sendMessage({ action: 'POMODORO_RESET' }, () => {
-    timeDisplay.innerText = '00:00:00';
-    phaseDisplay.innerText = 'WORK PHASE';
-    startBtn.textContent = 'Start';
-    startBtn.disabled = false;
-    clearInterval(localDisplayInterval);
-    localDisplayInterval = null;
+  chrome.runtime.sendMessage({ action: 'RESET' }, () => {
+    timeDisplay.innerText = "00:00:00";
+    phaseDisplay.innerText = "WORK PHASE";
+    syncDisplay();
   });
 });
 
+// Run once when the popup is opened
 syncDisplay();
